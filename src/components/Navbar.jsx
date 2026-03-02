@@ -7,7 +7,7 @@ import MenuIcon        from "@mui/icons-material/Menu";
 import HomeIcon        from "@mui/icons-material/Home";
 import InfoIcon        from "@mui/icons-material/Info";
 import WorkIcon        from "@mui/icons-material/Work";
-import TimelineIcon from "@mui/icons-material/Timeline";
+import TimelineIcon    from "@mui/icons-material/Timeline";
 import BuildIcon       from "@mui/icons-material/Build";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
 import DarkModeIcon    from "@mui/icons-material/DarkMode";
@@ -21,22 +21,21 @@ import { useLang } from "../context/LanguageContext.jsx";
 
 export default function Navbar({ currentMode, toggleMode }) {
   const { tr, lang, toggleLang, isRtl } = useLang();
-  const [open, setOpen]         = useState(false);
-  const [active, setActive]     = useState("hero");
-  const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen]           = useState(false);
+  const [active, setActive]       = useState("hero");
+  const [scrolled, setScrolled]   = useState(false);
   const [scrollPct, setScrollPct] = useState(0);
   const dark = currentMode === "dark";
 
   const navLinks = [
-          { id: "hero",     label: tr.nav.hero,     icon: <HomeIcon sx={{ fontSize: 14 }} />        },
-          { id: "projects", label: tr.nav.projects, icon: <WorkIcon sx={{ fontSize: 14 }} />        },
-          { id: "timeline", label: tr.nav.journey, icon: <TimelineIcon sx={{ fontSize: 14 }} /> },
-          { id: "skills",   label: tr.nav.skills,   icon: <BuildIcon sx={{ fontSize: 14 }} />       },
-          { id: "about",    label: tr.nav.about,    icon: <InfoIcon sx={{ fontSize: 14 }} />        },
-          { id: "contact",  label: tr.nav.contact,  icon: <ContactMailIcon sx={{ fontSize: 14 }} /> },
-        ];
+    { id: "hero",     label: tr.nav.hero,    icon: <HomeIcon sx={{ fontSize: 14 }} />        },
+    { id: "projects", label: tr.nav.projects,icon: <WorkIcon sx={{ fontSize: 14 }} />        },
+    { id: "timeline", label: tr.nav.journey, icon: <TimelineIcon sx={{ fontSize: 14 }} />    },
+    { id: "skills",   label: tr.nav.skills,  icon: <BuildIcon sx={{ fontSize: 14 }} />       },
+    { id: "about",    label: tr.nav.about,   icon: <InfoIcon sx={{ fontSize: 14 }} />        },
+    { id: "contact",  label: tr.nav.contact, icon: <ContactMailIcon sx={{ fontSize: 14 }} /> },
+  ];
 
-  // ── Scroll listeners ──────────────────────────────────────────────────────
   useEffect(() => {
     const fn = () => {
       setScrolled(window.scrollY > 30);
@@ -47,7 +46,6 @@ export default function Navbar({ currentMode, toggleMode }) {
     return () => window.removeEventListener("scroll", fn);
   }, []);
 
-  // ── Active section observer ───────────────────────────────────────────────
   useEffect(() => {
     const obs = new IntersectionObserver(
       (entries) => entries.forEach((e) => { if (e.isIntersecting) setActive(e.target.id); }),
@@ -63,7 +61,6 @@ export default function Navbar({ currentMode, toggleMode }) {
     setOpen(false);
   };
 
-  // ── Tokens ────────────────────────────────────────────────────────────────
   const glass  = dark ? "rgba(8,13,26,0.85)"   : "rgba(245,248,255,0.90)";
   const border = dark ? "rgba(77,171,247,0.13)" : "rgba(25,118,210,0.12)";
   const txtCol = dark ? "#c9e4ff"               : "#1a2a45";
@@ -83,33 +80,37 @@ export default function Navbar({ currentMode, toggleMode }) {
           backdropFilter: scrolled ? "blur(22px) saturate(180%)" : "none",
           borderBottom: scrolled ? `1px solid ${border}` : "1px solid transparent",
           transition: "background .4s, backdrop-filter .4s, border-color .4s",
-          overflow: "hidden", 
+          // ✅ حذفنا overflow:hidden من هنا — كان سبب قطع الـ progress bar
         }}
       >
-        <Box sx={{
-          position: "absolute", bottom: 0, left: 0,
-          width: "100%", height: "2px",
-          background: dark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.05)",
-          zIndex: 2,
-        }}>
-          <motion.div
-            animate={{ width: `${scrollPct}%` }}
-            transition={{ duration: 0.1, ease: "linear" }}
-            style={{
-              height: "100%",
-              background: `linear-gradient(90deg, ${accent}, #38d9a9)`,
-              boxShadow: `0 0 8px ${accent}66`,
-              borderRadius: "0 2px 2px 0",
-            }}
-          />
-        </Box>
+<Box sx={{
+  position: "absolute",
+  bottom: 0,
+  left: 0,        
+  width: "100%",
+  height: "2px",
+  background: dark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.05)",
+  zIndex: 2,
+  pointerEvents: "none",
+  overflow: "hidden",  
+}}>
+  <motion.div
+    animate={{ width: `${scrollPct}%` }}
+    transition={{ duration: 0.1, ease: "linear" }}
+    style={{
+      height: "100%",
+      background: `linear-gradient(90deg, ${accent}, #38d9a9)`,
+      boxShadow: `0 0 8px ${accent}66`,
+      borderRadius: "0 2px 2px 0",
+    }}
+  />
+</Box>
 
         {/* ─── Logo ─── */}
         <Box
           onClick={() => scrollTo("hero")}
           sx={{ display: "flex", alignItems: "center", gap: 1.4, cursor: "pointer", userSelect: "none" }}
         >
-          {/* Logo with pulse ring on active=hero */}
           <Box sx={{ position: "relative", flexShrink: 0 }}>
             {active === "hero" && (
               <motion.div
@@ -142,14 +143,14 @@ export default function Navbar({ currentMode, toggleMode }) {
               lineHeight: 1.1, letterSpacing: .3,
               fontFamily: "'Syne', sans-serif",
             }}>
-               {tr.hero.name}
+              {tr.hero.name}
             </Typography>
             <Typography sx={{
               fontSize: ".58rem", color: accent,
               letterSpacing: 2, textTransform: "uppercase", fontWeight: 600,
               fontFamily: "'DM Mono', monospace",
             }}>
-               {tr.hero.role}
+              {tr.hero.role}
             </Typography>
           </Box>
         </Box>
@@ -199,7 +200,6 @@ export default function Navbar({ currentMode, toggleMode }) {
 
         {/* ─── Right controls ─── */}
         <Box sx={{ display: "flex", alignItems: "center", gap: .8 }}>
-          {/* Language */}
           <Tooltip title={tr.nav.langToggle}>
             <Box onClick={toggleLang} sx={{
               px: 1.4, py: .6, borderRadius: "10px",
@@ -214,7 +214,6 @@ export default function Navbar({ currentMode, toggleMode }) {
             </Box>
           </Tooltip>
 
-          {/* Dark/Light */}
           <Tooltip title={dark ? tr.nav.themeLight : tr.nav.themeDark}>
             <Box onClick={toggleMode} sx={{
               width: 34, height: 34, borderRadius: "10px",
@@ -233,7 +232,6 @@ export default function Navbar({ currentMode, toggleMode }) {
             </Box>
           </Tooltip>
 
-          {/* Mobile burger */}
           <Box onClick={() => setOpen(true)} sx={{
             display: { xs: "flex", md: "none" },
             width: 34, height: 34, borderRadius: "10px",
@@ -248,9 +246,10 @@ export default function Navbar({ currentMode, toggleMode }) {
         </Box>
       </Box>
 
-      {/* ══════════ MOBILE DRAWER — premium rebuild ══════════ */}
+      {/* ══════════ MOBILE DRAWER ══════════ */}
       <Drawer
-        anchor={isRtl ? "left" : "right"}
+        // ✅ RTL = يفتح من اليمين / LTR = يفتح من اليمين كمان (الأفضل للـ UX)
+        anchor={isRtl ? "right" : "right"}
         open={open}
         onClose={() => setOpen(false)}
         PaperProps={{
@@ -261,22 +260,24 @@ export default function Navbar({ currentMode, toggleMode }) {
             border: "none",
           },
         }}
-        // Darker backdrop
-        slotProps={{ backdrop: { sx: { backdropFilter: "blur(6px)", background: "rgba(2,6,18,0.65)" } } }}
+        slotProps={{
+          backdrop: {
+            sx: { backdropFilter: "blur(6px)", background: "rgba(2,6,18,0.65)" }
+          }
+        }}
       >
-        {/* Inner glass card */}
         <Box sx={{
           height: "100%",
           background: dark
             ? "linear-gradient(160deg, rgba(8,14,30,0.98) 0%, rgba(6,10,22,0.99) 100%)"
             : "linear-gradient(160deg, rgba(248,251,255,0.99) 0%, rgba(238,245,255,0.99) 100%)",
-          borderLeft: !isRtl ? `1px solid ${border}` : "none",
-          borderRight: isRtl  ? `1px solid ${border}` : "none",
+          // ✅ Border دايماً على اليسار لأن الـ drawer دايماً من اليمين
+          borderLeft: `1px solid ${border}`,
           display: "flex", flexDirection: "column",
           position: "relative", overflow: "hidden",
         }}>
 
-          {/* Subtle background glow */}
+          {/* Background glows */}
           <Box sx={{
             position: "absolute", top: -60, right: -60,
             width: 220, height: 220, borderRadius: "50%",
@@ -301,9 +302,12 @@ export default function Navbar({ currentMode, toggleMode }) {
               <Box sx={{ position: "relative" }}>
                 <Box
                   component="img" src={logoImage} alt="AW"
-                  sx={{ width: 40, height: 40, borderRadius: "50%", objectFit: "cover", border: `2px solid ${alpha(accent, 0.5)}`, boxShadow: `0 0 14px ${alpha(accent, 0.2)}` }}
+                  sx={{
+                    width: 40, height: 40, borderRadius: "50%", objectFit: "cover",
+                    border: `2px solid ${alpha(accent, 0.5)}`,
+                    boxShadow: `0 0 14px ${alpha(accent, 0.2)}`,
+                  }}
                 />
-                {/* Online dot */}
                 <Box sx={{
                   position: "absolute", bottom: 1, right: 1,
                   width: 9, height: 9, borderRadius: "50%",
@@ -314,14 +318,14 @@ export default function Navbar({ currentMode, toggleMode }) {
               </Box>
               <Box>
                 <Typography sx={{
-                  fontWeight: 800, fontSize: '.88rem', color: txtCol,
+                  fontWeight: 800, fontSize: ".88rem", color: txtCol,
                   fontFamily: "'Syne', sans-serif", lineHeight: 1.2,
                 }}>
                   {tr.hero.name}
                 </Typography>
                 <Typography sx={{
-                  fontSize: '.58rem', color: accent,
-                  letterSpacing: 1.8, textTransform: 'uppercase', fontWeight: 600,
+                  fontSize: ".58rem", color: accent,
+                  letterSpacing: 1.8, textTransform: "uppercase", fontWeight: 600,
                   fontFamily: "'DM Mono', monospace",
                 }}>
                   {tr.hero.role}
@@ -329,7 +333,6 @@ export default function Navbar({ currentMode, toggleMode }) {
               </Box>
             </Box>
 
-            {/* Close button */}
             <Box onClick={() => setOpen(false)} sx={{
               width: 32, height: 32, borderRadius: "9px",
               border: `1px solid ${border}`,
@@ -349,8 +352,8 @@ export default function Navbar({ currentMode, toggleMode }) {
               return (
                 <motion.div
                   key={link.id}
-                  initial={{ opacity: 0, x: isRtl ? -20 : 20 }}
-                  animate={{ opacity: open ? 1 : 0, x: open ? 0 : (isRtl ? -20 : 20) }}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: open ? 1 : 0, x: open ? 0 : 20 }}
                   transition={{ delay: idx * 0.06 + 0.1, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                 >
                   <ListItem disablePadding sx={{ mb: .8 }}>
@@ -367,15 +370,16 @@ export default function Navbar({ currentMode, toggleMode }) {
                         "&:hover": {
                           background: dark ? "rgba(77,171,247,.07)" : "rgba(25,118,210,.05)",
                           border: `1px solid ${alpha(accent, 0.15)}`,
-                          transform: "translateX(3px)",
+                          // ✅ hover يتحرك لليسار في RTL (عكس اتجاه الـ drawer)
+                          transform: isRtl ? "translateX(-3px)" : "translateX(3px)",
                         },
                       }}
                     >
-                      {/* Active left accent bar */}
+                      {/* ✅ Active bar — دايماً على اليسار في الـ drawer اللي بيفتح من اليمين */}
                       {isActive && (
                         <Box sx={{
                           position: "absolute",
-                          [isRtl ? "right" : "left"]: 0,
+                          left: 0,
                           top: "20%", bottom: "20%",
                           width: 3, borderRadius: 99,
                           background: `linear-gradient(180deg, ${accent}, #38d9a9)`,
@@ -398,10 +402,11 @@ export default function Navbar({ currentMode, toggleMode }) {
                           fontWeight: isActive ? 700 : 500,
                           color: isActive ? accent : txtCol,
                           letterSpacing: .2,
+                          // ✅ النص يتمحور صح في RTL
+                          textAlign: isRtl ? "right" : "left",
                         }}
                       />
 
-                      {/* Chevron for active */}
                       {isActive && (
                         <Box sx={{ fontSize: ".6rem", color: alpha(accent, 0.5), fontFamily: "'DM Mono', monospace" }}>
                           ●
@@ -421,26 +426,38 @@ export default function Navbar({ currentMode, toggleMode }) {
             display: "flex", alignItems: "center", justifyContent: "space-between",
             position: "relative", zIndex: 1,
           }}>
-            {/* Scroll progress mini */}
             <Box sx={{ display: "flex", flexDirection: "column", gap: .6 }}>
-              <Typography sx={{ fontSize: ".58rem", color: alpha(txtCol, 0.35), fontFamily: "'DM Mono', monospace", textTransform: "uppercase", letterSpacing: 1 }}>
+              <Typography sx={{
+                fontSize: ".58rem", color: alpha(txtCol, 0.35),
+                fontFamily: "'DM Mono', monospace", textTransform: "uppercase", letterSpacing: 1,
+              }}>
                 Progress
               </Typography>
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                <Box sx={{ width: 80, height: 2, borderRadius: 99, background: dark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)", overflow: "hidden" }}>
+                <Box sx={{
+                  width: 80, height: 2, borderRadius: 99,
+                  background: dark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)",
+                  overflow: "hidden",
+                }}>
                   <motion.div
                     animate={{ width: `${scrollPct}%` }}
                     transition={{ duration: 0.15, ease: "linear" }}
-                    style={{ height: "100%", background: `linear-gradient(90deg, ${accent}, #38d9a9)`, borderRadius: 99 }}
+                    style={{
+                      height: "100%",
+                      background: `linear-gradient(90deg, ${accent}, #38d9a9)`,
+                      borderRadius: 99,
+                    }}
                   />
                 </Box>
-                <Typography sx={{ fontSize: ".6rem", color: accent, fontFamily: "'DM Mono', monospace", fontWeight: 600 }}>
+                <Typography sx={{
+                  fontSize: ".6rem", color: accent,
+                  fontFamily: "'DM Mono', monospace", fontWeight: 600,
+                }}>
                   {Math.round(scrollPct)}%
                 </Typography>
               </Box>
             </Box>
 
-            {/* Theme + Lang controls */}
             <Box sx={{ display: "flex", gap: .8 }}>
               <Box onClick={toggleLang} sx={{
                 px: 1.2, py: .55, borderRadius: "8px",

@@ -21,7 +21,7 @@ function App({ currentMode, toggleMode }) {
   if (loading) return <Loader onComplete={() => setLoading(false)} />;
 
   return (
-    <div dir={isRtl ? "rtl" : "ltr"} style={{ position: "relative" }}>
+    <div style={{ position: "relative" }}>
       {/* ── Global background effects ── */}
       <BackgroundEffects dark={dark} />
 

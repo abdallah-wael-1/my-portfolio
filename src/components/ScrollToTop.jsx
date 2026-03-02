@@ -38,8 +38,8 @@ export default function ScrollToTop({ showAfter = 300 }) {
           style={{
             position: "fixed",
             right: isRtl ? "auto" : 28,
-            left: isRtl ? 28 : "auto",
-            bottom: 28,
+            left: isRtl ? 60  : "auto",
+            bottom: 25,
             zIndex: 1400,
           }}
         >

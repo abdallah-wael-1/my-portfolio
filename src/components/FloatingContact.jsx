@@ -298,7 +298,7 @@ export default function FloatingContact() {
       </AnimatePresence>
 
       {/* FAB */}
-      <Box style={{ position:"fixed", bottom:28, left:isRtl?"auto":28, right:isRtl?28:"auto", zIndex:1400, display:"flex", flexDirection:"column", alignItems:isRtl?"flex-end":"flex-start", gap:8 }}>
+      <Box style={{ position:"fixed", bottom:28, left:isRtl?"auto":28, right:isRtl? 1:"auto", zIndex:1400, display:"flex", flexDirection:"column", alignItems:isRtl?"flex-end":"flex-start", gap:8 }}>
         <AnimatePresence>
           {!open && (
             <motion.div key="label-chip"
